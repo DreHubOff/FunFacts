@@ -4,10 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.studying.funfacts.R
 import com.studying.funfacts.network.ApiService
+import com.studying.funfacts.network.model.Fact
 import com.studying.funfacts.network.model.ResultHolder
 import com.studying.funfacts.ui.search.SearchFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +28,15 @@ class MainActivity : AppCompatActivity() {
             listFragment = ListFragment.newInstance()
             searchFragment = SearchFragment.newInstance()
         }
-        disposable = ApiService.getData("cat")
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ facts: ResultHolder -> showInfo(facts) }) { t: Throwable? -> showError(t) }
+        ApiService.getData("cat").enqueue(object : Callback<List<Fact>>{
+            override fun onFailure(call: Call<List<Fact>>, t: Throwable) {
+                println("ERROR")
+            }
+
+            override fun onResponse(call: Call<List<Fact>>, response: Response<List<Fact>>) {
+              showInfo(response.body() as List<Fact>)
+            }
+        })
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.search_container, searchFragment)
@@ -37,9 +46,9 @@ class MainActivity : AppCompatActivity() {
         println("ERROR")
     }
 
-    private fun showInfo(facts: ResultHolder) {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.list_container, listFragment.apply { updateFactsList(facts) })
-//            .commit()
+    private fun showInfo(facts: List<Fact>) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.list_container, listFragment.apply { updateFactsList(facts) })
+            .commit()
     }
 }

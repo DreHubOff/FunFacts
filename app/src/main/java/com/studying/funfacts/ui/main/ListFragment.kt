@@ -14,14 +14,13 @@ import kotlinx.android.synthetic.main.fragment_list.*
 class ListFragment : Fragment() {
 
     companion object {
-        private lateinit var factAdapter: FactsAdapter
+        private val factAdapter = FactsAdapter()
         fun newInstance() = ListFragment()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        factAdapter = FactsAdapter()
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 

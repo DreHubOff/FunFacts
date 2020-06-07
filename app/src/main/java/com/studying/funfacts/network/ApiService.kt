@@ -5,6 +5,7 @@ import com.studying.funfacts.network.model.ResultHolder
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,7 +14,7 @@ import retrofit2.http.Query
 
 
 object ApiService {
-    private const val DEF_AMOUNT = 2
+    private const val DEF_AMOUNT = 100
     private const val END_POINT = "https://cat-fact.herokuapp.com/facts/"
     private var factsApi: FactsApi
 
@@ -25,7 +26,7 @@ object ApiService {
         fun weatherData(
             @Query("animal_type") animal_type: String,
             @Query("amount") amount: Int
-        ): Observable<ResultHolder>
+        ): Call<List<Fact>>
     }
 
 
