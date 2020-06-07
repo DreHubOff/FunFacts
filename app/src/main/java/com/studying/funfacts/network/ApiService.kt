@@ -1,8 +1,6 @@
 package com.studying.funfacts.network
 
 import com.studying.funfacts.network.model.Fact
-import com.studying.funfacts.network.model.ResultHolder
-import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
