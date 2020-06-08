@@ -23,6 +23,8 @@ class RequestBuilder(private val context: Context) {
         val validAnimal = animal.toLowerCase(Locale.ROOT).trim()
         val requestMap = HashMap<Int, String>()
 
+        lastEnterType.edit().clear().apply()
+
         val preferences = context.getSharedPreferences(validAnimal, Context.MODE_PRIVATE)
 
         if (preferences.getString("0", null).isNullOrEmpty()) {
