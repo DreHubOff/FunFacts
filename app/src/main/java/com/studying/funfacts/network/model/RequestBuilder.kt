@@ -10,15 +10,17 @@ import retrofit2.Response
 import java.util.*
 import kotlin.collections.HashMap
 
-private const val TYPES = "Animal types"
+private const val LAST_TYPE_FILE = "Last animal type file LAST_TYPE_FILE"
+const val LAST_TYPE = "Last animal type LAST_TYPE"
 
-class RequestBuilder(private val context: Context, animal: String) {
+class RequestBuilder(private val context: Context) {
 
     private val requestResult = context as RequestResult
-    private val validAnimal = animal.toLowerCase(Locale.ROOT).trim()
-    val typesPreferences: SharedPreferences = context.getSharedPreferences(TYPES, Context.MODE_PRIVATE)
+    val lastEnterType: SharedPreferences =
+        context.getSharedPreferences(LAST_TYPE_FILE, Context.MODE_PRIVATE)
 
-    fun buildRequest() {
+    fun buildRequest(animal: String) {
+        val validAnimal = animal.toLowerCase(Locale.ROOT).trim()
         val requestMap = HashMap<Int, String>()
 
         val preferences = context.getSharedPreferences(validAnimal, Context.MODE_PRIVATE)
@@ -41,14 +43,14 @@ class RequestBuilder(private val context: Context, animal: String) {
                         }
                         requestResult.onRequestResult(requestMap)
                         editor.apply()
-                        typesPreferences.edit()
-                            .putString(typesPreferences.all.size.toString(), validAnimal).apply()
+                        lastEnterType.edit().putString(LAST_TYPE, validAnimal).apply()
                     }
                 }
             })
         } else {
             preferences.all.forEach { (pos, text) -> requestMap[pos.toInt()] = text as String }
             requestResult.onRequestResult(requestMap)
+            lastEnterType.edit().putString(LAST_TYPE, validAnimal).apply()
         }
     }
 

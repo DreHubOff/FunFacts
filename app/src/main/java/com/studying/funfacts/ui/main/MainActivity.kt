@@ -3,6 +3,7 @@ package com.studying.funfacts.ui.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.studying.funfacts.R
+import com.studying.funfacts.network.model.LAST_TYPE
 import com.studying.funfacts.network.model.RequestBuilder
 import com.studying.funfacts.ui.search.SearchFragment
 
@@ -25,10 +26,14 @@ class MainActivity : AppCompatActivity(), RequestBuilder.RequestResult {
             .replace(R.id.search_container, searchFragment)
             .commit()
 
-        RequestBuilder(this,"snake").buildRequest()
+        val builder = RequestBuilder(this)
+        val animal: String =
+            builder.lastEnterType.getString(LAST_TYPE, "cat").orEmpty().ifEmpty { "cat" }
+        builder.buildRequest(animal)
     }
 
-    override fun onRequestResult(requestMap: HashMap<Int, String>) = listFragment.updateFactsList(requestMap)
+    override fun onRequestResult(requestMap: HashMap<Int, String>) =
+        listFragment.updateFactsList(requestMap)
 
 
 }
