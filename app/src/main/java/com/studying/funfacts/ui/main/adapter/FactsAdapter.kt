@@ -11,9 +11,9 @@ import kotlinx.android.synthetic.main.item.view.*
 
 class FactsAdapter() :
     RecyclerView.Adapter<FactsAdapter.FactHolder>() {
-    private val factsList = mutableListOf<Fact>()
+    private val factsList = mutableListOf<String>()
 
-    fun update(facts: List<Fact>) {
+    fun update(facts: List<String>) {
         factsList.apply {
             clear()
             addAll(facts)
@@ -31,9 +31,9 @@ class FactsAdapter() :
     }
 
     class FactHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(position: Int, fact: Fact) {
+        fun bind(position: Int, fact: String) {
             itemView.number_of_fact.text = position.plus(1).toString()
-            itemView.fact_buddy.text = fact.text
+            itemView.fact_buddy.text = fact
         }
     }
 }

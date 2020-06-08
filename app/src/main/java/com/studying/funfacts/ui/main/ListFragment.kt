@@ -21,7 +21,6 @@ class ListFragment : Fragment() {
 
     companion object {
         private val factAdapter = FactsAdapter()
-        private val factsList = mutableListOf<Fact>()
         fun newInstance() = ListFragment()
     }
 
@@ -36,34 +35,10 @@ class ListFragment : Fragment() {
             layoutManager = LinearLayoutManager(view.context)
             adapter = factAdapter
         }
-        val context = view.context
-        val preferences = context.getSharedPreferences("cat", Context.MODE_PRIVATE)
+    }
 
-        if (preferences.getString("0", null) == null) {
-            ApiService.getData("cat").enqueue(object : Callback<List<Fact>> {
-                override fun onFailure(call: Call<List<Fact>>, t: Throwable) = Unit
-
-                @SuppressLint("DefaultLocale")
-                override fun onResponse(call: Call<List<Fact>>, response: Response<List<Fact>>) {
-                    factsList.apply {
-                        clear()
-                        addAll(response.body() as List<Fact>)
-                    }
-                    factAdapter.update(factsList)
-                    val preferences = context.getSharedPreferences(
-                        factsList.first().type.toLowerCase().trim(),
-                        Context.MODE_PRIVATE
-                    )
-                    val editor = preferences.edit()
-                    for (i in 0..factsList.size.minus(1)) {
-                        editor.putString(i.toString(), factsList[i].text)
-                    }
-                    editor.apply()
-                }
-            })
-        } else {
-        }
-
+    fun updateFactsList(requestMap: HashMap<Int, String>){
+        factAdapter.update(requestMap.values.toList())
     }
 }
 
